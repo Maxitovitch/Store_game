@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <style>
+        body {
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('../../media/image_site/fon.jpg');
+            background-position: center;
+            background-size: cover;
+        }
+
+        h1 {
+            color: #007BFF;
+            text-align: center;
+        }
+
+        .profile-container {
+            margin: auto;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            height: 603px;
+        }
+
+        .profile-container img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 3px solid #007bff;
+            margin: 15px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            background: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .button-secondary {
+            background: #6c757d;
+        }
+
+        .button-secondary:hover {
+            background: #5a6268;
+        }
+
+        .logout-button {
+            width: 100%;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Профиль пользователя {{ user.username }}</h1>
+        <img src="{{ profile.avatar.url }}">
+        <p style="color: white;">Цена: <span style="color: green;">{{ profile.money }} ₽</span></p>
+        <div class="button-group">
+            <a class="button" href="{% url 'edit_profile' %}">Редактировать профиль</a>
+            <a class="button" href="{% url 'user_orders' %}">Мои заказы</a>
+            <a class="button" href="{% url 'add_balance' %}">Пополнить баланс</a>
+        </div>
+        <a class="button button-secondary logout-button" href="{% url 'logout_view' %}" style="width: 545px; justify-content: center; text-align: center;">Выход</a>
+    </div>
+</body>
+</html>

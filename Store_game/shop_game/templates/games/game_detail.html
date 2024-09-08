@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ game.title }}</title>
+    <style>
+        body {
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('../../media/image_site/fon.jpg');
+            background-position: center;
+            background-size: cover;
+        }
+
+        .container {
+            display: flex;
+            height: 641.5px;
+            width: 97,5%;
+            padding: 30px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 0px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .cover {
+            flex: 1;
+            margin-right: 20px;
+
+        }
+        .details {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+        }
+        .system-requirements {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .image-button-like {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-image: url('../../media/image_site/button_like.png');
+            background-size: cover;
+        }
+
+        .image-button-like:hover {
+            opacity: 0.8;
+        }
+
+        .image-button-like:active {
+            transform: scale(0.95);
+        }
+
+        .image-button-dislike {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;;
+            background-image: url('../../media/image_site/button_dislike.png');
+            background-size: cover;
+        }
+
+        .image-button-dislike:hover {
+            opacity: 0.8;
+        }
+
+        .image-button-dislike:active {
+            transform: scale(0.95);
+        }
+
+        .price-container {
+            display: flex;
+            margin-top: 30px;
+        }
+        .buy-button {
+            margin-top: 10px;
+            border: none;
+            color: white;
+            padding: 5px 2px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 13px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            width: 100px;
+            height: 30px;
+        }
+
+        .buy-button {
+            background-color: #4CAF50;
+        }
+        .buy-button:hover {
+            background-color: #45a049;
+        }
+        .support-button {
+            background-color: #008CBA;
+        }
+
+
+        .image-support-button {
+            margin-top: 10px;
+            margin-left: 5px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 8px;
+            background-image: url('../../media/image_site/support_button_2.png');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        .image-support-button:hover {
+            background-color: #007bb5;
+        }
+
+        .image-support-button:hover {
+            opacity: 0.8;
+        }
+
+        .image-support-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cover">
+            <img src="{{ game.image.url }}" style="width: 508px; border-radius: 10px; border: 5px solid #fff; height: 635px;">
+        </div>
+        <div class="details">
+            <h1>{{ game.title }}</h1>
+            <div class="price-container">
+                <p style="color: white;">Цена: <span style="color: green;">{{ game.price }} ₽</span></p>
+                <a href="{% url 'buy_game' game.id %}"><button class="buy-button">Купить</button></a>
+                <a href="support/"><button class="image-support-button"></button></a>
+            </div>
+            <p>{{ game.description }}</p>
+            <p>👎{{ dislike_count }} &nbsp; 👍{{ like_count }} {% if not user_rating %} <button id="rate-button" class="rate-button" onclick="showRatingForm()" style="Background-color: yellow; border-radius: 8px; border: none; hover: opacity(0.8), background-color: gold; cursor: pointer; active: transform(0.95);">Оценить</button> {% endif %}</p>
+            {% if not user_rating %}
+                <div id="rating-form" style="display:none;">
+                    <form method="post" action="{% url 'rate_game' game.id %}" onsubmit="hideRatingForm()">
+                        {% csrf_token %}
+                        <button type="submit" class="image-button-dislike" name="vote_type" value="dislike"></button>
+                        <button type="submit" class="image-button-like" name="vote_type" value="like"></button>
+                    </form>
+                </div>
+            {% endif %}
+            <script>
+                function showRatingForm() {
+                    document.getElementById('rating-form').style.display = 'block';
+                    document.getElementById('rate-button').style.display = 'none';
+                }
+
+                function hideRatingForm() {
+                    document.getElementById('rating-form').style.display = 'none';
+                }
+            </script>
+
+
+            <div>
+                <strong>Рекомендуемые системные требования:</strong>
+                <button id="toggleRequirementsButton" style="background-color: transparent; border: none; cursor: pointer;">Развернуть</button>
+            </div>
+            <div class="system-requirements" id="systemRequirements">
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; ◎ Операционная система: {{ os }}</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; ◎ Процессор: {{ cpu }}</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; ◎ ОЗУ: {{ ram }}</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; ◎ Место на диске: {{ storage }}</p>
+                <p>&nbsp; &nbsp; &nbsp; &nbsp; ◎ Видеокарта: {{ gpu }}</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("toggleRequirementsButton").addEventListener("click", function() {
+            var requirements = document.getElementById("systemRequirements");
+            if (requirements.style.display === "none" || requirements.style.display === "") {
+                requirements.style.display = "block";
+                this.innerText = "Свернуть";
+            } else {
+                requirements.style.display = "none";
+                this.innerText = "Развернуть";
+            }
+        });
+    </script>
+</body>
+</html>

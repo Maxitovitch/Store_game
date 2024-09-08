@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Редактирование профиля</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-image: url('../media/image_site/fon.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .registration-container {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .avatar-wrapper {
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar-label {
+            position: absolute;
+            bottom: 60px; /* Настройте, где вы хотите разместить текст */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.7); /* Полупрозрачный фон под текстом */
+            padding: 5px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            margin: 10px 0; /* Отступы между полями ввода */
+            padding: 10px;
+            width: 300px; /* Ширина полей ввода */
+            border: 1px solid #fff; /* Цвет границы */
+            border-radius: 5px; /* Скругление углов */
+            background: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон для полей ввода */
+            color: black; /* Цвет текста в полях ввода */
+        }
+
+        input[type="file"] {
+            display: none; /* Скрываем реальный элемент input */
+        }
+
+        button {
+            margin-top: 10px; /* Отступ сверху для кнопки */
+            padding: 10px 15px; /* Внутренние отступы для кнопки */
+            background-color: #4CAF50; /* Цвет фона кнопки */
+            border: none; /* Без границ */
+            border-radius: 5px; /* Скругление углов кнопки */
+            color: white; /* Цвет текста на кнопке */
+            cursor: pointer; /* Указатель при наведении */
+        }
+
+        .login-link {
+            margin-top: 20px; /* Отступ сверху для ссылки */
+            color: white; /* Цвет текста ссылки */
+            text-decoration: underline; /* Подчеркнутый текст */
+            cursor: pointer; /* Указатель при наведении */
+        }
+    </style>
+
+</head>
+<body>
+    <div class="registration-container">
+        <div class="avatar-wrapper" id="avatarWrapper" onclick="document.getElementById('fileInput').click();">
+            <img id="avatar" src="{{ profile.avatar.url }}" />
+            <span class="avatar-label">Аватар</span>
+        </div>
+        <form method="post" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-container">
+            <div class="text">
+                <h1>Редактирование профиля</h1>
+            </div>
+            <input type="text" id="username" name="new_username" placeholder="Имя пользователя" value="{{ user.username }}" required>
+            <input type="email" id="email" name="new_email" placeholder="Email" value="{{ user.email }}" required>
+            <input type="password" id="password" name="new_password1" placeholder="Новый пароль" required>
+            <input type="password" id="password2" name="new_password2" placeholder="Повторите пароль" required>
+            <input type="file" id="fileInput" name="new_avatar" accept="image/jpeg, image/png, image/jpg"/>
+            <button type="submit">Сохранить изменения</button>
+        </div>
+        </form>
+    </div>
+
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const avatarImage = document.getElementById('avatar');
+                    avatarImage.setAttribute('src', event.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Смена изображений</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-image: url('../media/image_site/money_fon2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        img {
+            width: 430px;
+            height: 240px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            width: 80%;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #007BFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            background-size: cover;
+        }
+
+        .icon:hover {
+            background-color: #e7f1ff;
+        }
+
+        .icon1 {
+            background-image: url('../media/image_site/bank_card_icon.png');
+        }
+
+        .icon2 {
+            background-image: url('../media/image_site/qiwi_icon.png');
+        }
+
+        .icon3 {
+            background-image: url('../media/image_site/sbp.jpg');
+        }
+
+
+        button {
+            margin-top: 1px;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        input:invalid {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Пополните баланс</h1>
+        <img id="image" src="../media/image_site/bank_card.png">
+        <form method="post">
+            {% csrf_token %}
+            <input type="number" name="amount" id="amount" min="0" max="1000000" onkeydown="return event.key !== '-', event.key !== '.'" style="width: 95%;" placeholder="Введите сумму" value="0" required>
+            <button type="submit">Пополнить</button>
+
+        </form>
+        <div class="icon-container">
+            <div class="icon icon1" onclick="changeImage('../media/image_site/bank_card.png')"></div>
+            <div class="icon icon2" onclick="changeImage('../media/image_site/qiwi_card.png')"></div>
+            <div class="icon icon3" onclick="changeImage('../media/image_site/sbp_.png')"></div>
+        </div>
+    </div>
+
+    <script>
+        function changeImage(imageSrc) {
+            document.getElementById('image').src = imageSrc;
+        }
+    </script>
+</body>
+</html>
